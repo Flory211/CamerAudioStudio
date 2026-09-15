@@ -1,0 +1,8 @@
+PyQt6>=6.6.0
+opencv-python>=4.9.0
+numpy>=1.26.0
+pyvirtualcam>=0.12.0
+sounddevice>=0.4.6
+scipy>=1.12.0
+mss>=9.0.0
+pygetwindow>=0.0.9
