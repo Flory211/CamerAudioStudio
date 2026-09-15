@@ -42,7 +42,6 @@ desktop.ini
 
 # PyInstaller
 *.manifest
-*.spec
 
 # Logs
 *.log
