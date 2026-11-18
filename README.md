@@ -6,9 +6,12 @@
 
 ## Быстрый старт
 
-Скачай [архив для Windows x64](https://github.com/Flory211/CamerAudioStudio/releases/download/v2.0-alpha/CamerAudioStudio-Windows-x64.zip),
-распакуй его целиком и открой `CamerAudioStudio.exe`. Папка `_internal` должна
-оставаться рядом с EXE.
+Скачай и запусти [установщик для Windows x64](https://github.com/Flory211/CamerAudioStudio/releases/download/v2.0-alpha/CamerAudioStudio-Setup-Windows-x64.exe).
+После установки открой «Камер Аудио Студио» через меню «Пуск».
+
+Для запуска без установки скачай [ZIP](https://github.com/Flory211/CamerAudioStudio/releases/download/v2.0-alpha/CamerAudioStudio-Windows-x64.zip),
+распакуй его целиком и открой `CamerAudioStudio.exe`. Папка `_internal`
+должна лежать рядом с EXE.
 
 1. Добавь источник слева. Выбери слой и настрой его справа.
 2. На холсте перемещай слой и меняй размер за правый нижний угол.
@@ -118,5 +121,10 @@ python -m venv .venv
 ```powershell
 .venv\Scripts\python.exe main.py --smoke-test --check-media --report build/health.json --render-ui build/studio-preview.png
 ```
+
+Чтобы собрать установщик из ZIP для Windows x64, запусти
+`./installer/build.ps1 -Archive путь-к-архиву.zip` с [NSIS](https://nsis.sourceforge.io/Download)
+в `PATH` или передай путь к `makensis.exe` через `-Compiler`.
+Установщик появится в папке `dist`.
 
 Лицензия исходников — [MIT](LICENSE); сторонние библиотеки и модели имеют свои лицензии.
