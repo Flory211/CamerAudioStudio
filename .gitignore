@@ -26,6 +26,13 @@ env/
 venv/
 ENV/
 env.bak/
+.venv/
+.studio-cache/
+models/*.tflite
+models/*.task
+models/*.zip
+models/*.download
+models/vosk-model-*/
 venv.bak/
 
 # IDE

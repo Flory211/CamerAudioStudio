@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from app.video.face_mask import FaceMask
 
 
 class VideoEffects:
@@ -22,6 +23,8 @@ class VideoEffects:
         # Transform
         self.mirror_h = False
         self.mirror_v = False
+        # Face mask
+        self.face_mask = FaceMask()
         # Cache
         self._gamma_lut = None
         self._gamma_cached = -1.0
@@ -122,7 +125,7 @@ class VideoEffects:
         # Pixelate
         if self.pixelate > 0:
             block = max(self.pixelate // 5, 2)
-            small = cv2.resize(result, (w // block, h // block), interpolation=cv2.INTER_LINEAR)
+            small = cv2.resize(result, (max(1, w // block), max(1, h // block)), interpolation=cv2.INTER_LINEAR)
             result = cv2.resize(small, (w, h), interpolation=cv2.INTER_NEAREST)
 
         # Vignette
@@ -154,5 +157,8 @@ class VideoEffects:
             inverted = cv2.bitwise_not(result)
             w_blend = self.invert / 100.0
             result = cv2.addWeighted(result, 1.0 - w_blend, inverted, w_blend, 0)
+
+        # Face mask
+        result = self.face_mask.apply(result)
 
         return result

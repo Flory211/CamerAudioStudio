@@ -1,13 +1,34 @@
 # -*- mode: python ; coding: utf-8 -*-
+from pathlib import Path
+from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs, collect_submodules
+
+studio_data = [('app/web', 'app/web')]
+for filename in ('selfie_segmenter_landscape.tflite', 'face_landmarker.task', 'sources.json', 'README.md'):
+    if Path('models', filename).is_file():
+        studio_data.append((str(Path('models', filename)), 'models'))
+if Path('models/vosk-model-small-ru-0.22').is_dir():
+    studio_data.append(('models/vosk-model-small-ru-0.22', 'models/vosk-model-small-ru-0.22'))
+for package in ('mediapipe', 'vosk', 'soundcard'):
+    studio_data += collect_data_files(package, excludes=['**/tests/**', '**/*test*'])
+studio_binaries = []
+for package in ('mediapipe', 'vosk', 'av', 'pylibsrtp'):
+    studio_binaries += collect_dynamic_libs(package)
+studio_imports = collect_submodules('av', filter=lambda name: 'test' not in name)
+studio_imports += ['aiortc', 'aiohttp', 'vosk', 'soundcard.mediafoundation', 'pycaw.pycaw',
+    'mediapipe.tasks.python.vision.image_segmenter', 'mediapipe.tasks.python.vision.face_landmarker',
+    'mediapipe.tasks.python.core.base_options', 'PIL.ImageFont', 'psutil', 'av.audio.resampler']
 
 block_cipher = None
 
 a = Analysis(
     ['main.py'],
     pathex=[],
-    binaries=[],
-    datas=[],
-    hiddenimports=[
+    binaries=studio_binaries,
+    datas=[
+        ('masks/trollface.png', 'masks'),
+        ('haarcascade_frontalface_default.xml', '.'),
+    ] + studio_data,
+    hiddenimports=studio_imports + [
         # App modules
         'app',
         'app.main_window',
@@ -80,7 +101,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['IPython', 'pytest', 'notebook', 'tkinter', 'matplotlib.tests', 'scipy.tests', 'numpy.tests'],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
@@ -94,7 +115,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='CamerUdioStt',
+    name='CamerAudioStudio',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -115,5 +136,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='CamerUdioStt',
+    name='CamerAudioStudio',
 )
